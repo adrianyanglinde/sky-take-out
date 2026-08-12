@@ -38,7 +38,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     /**
-     * 通过knife4j生成接口文档
+     * Springfox 生成 Swagger 文档，Knife4j 提供增强版文档 UI 和调试功能
      * @return
      */
     @Bean
