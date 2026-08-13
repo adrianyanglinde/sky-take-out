@@ -21,6 +21,20 @@ public interface EmployeeMapper {
     void insert(Employee employee);
 
     /**
+     * 更新员工数据
+     * @param employee
+     */
+    void update(Employee employee);
+
+    /**
+     * 根据ID获取员工数据
+     * @param id
+     * @return
+     */
+    @Select("select * from employee where id = #{id}")
+    Employee getById(Long id);
+
+    /**
      * 根据用户名查询员工
      * @param username
      * @return

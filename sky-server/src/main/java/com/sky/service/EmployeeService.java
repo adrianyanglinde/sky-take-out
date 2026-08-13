@@ -15,11 +15,33 @@ public interface EmployeeService {
     void save(EmployeeDTO employeeDTO);
 
     /**
+     * 编辑员工
+     * @param employeeDTO
+     * @return
+     */
+    Employee update(EmployeeDTO employeeDTO);
+
+    /**
+     * 修改员工状态
+     * @param status
+     * @param id
+     */
+    void changeStatus(Integer status,Long id);
+
+    /**
+     * 获取员工数据
+     * @param id
+     * @return
+     */
+    Employee getById(Long id);
+
+    /**
      * 员工分页查询
      * @param employeePageQueryDTO
      * @return
      */
     PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
 
     /**
      * 员工登录
