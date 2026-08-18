@@ -21,6 +21,7 @@ public interface CategoryMapper {
     @Insert("insert into category (type, name, sort, status, create_time, update_time, create_user, update_user) " +
             "values " +
             "(#{type}, #{name},#{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
+    @AutoFill(operationType = OperationType.INSERT)
     void insert(Category category);
 
     /**
