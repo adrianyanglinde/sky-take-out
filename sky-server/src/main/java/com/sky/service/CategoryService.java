@@ -5,6 +5,8 @@ import com.sky.entity.Category;
 import com.sky.entity.Employee;
 import com.sky.result.PageResult;
 
+import java.util.List;
+
 public interface CategoryService {
 
     /**
@@ -39,6 +41,14 @@ public interface CategoryService {
      * @return
      */
     PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO);
+
+
+    /**
+     * 根据分类类型获取分类
+     * @param type
+     * @return
+     */
+    List<Category> list(Integer type);
 
 
 }

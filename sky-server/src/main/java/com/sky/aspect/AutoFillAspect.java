@@ -45,7 +45,7 @@ public class AutoFillAspect {
         Object[] args = joinPoint.getArgs();
         if(args == null || args.length == 0) return;
         Object entity = args[0];
-        log.info("entity:{}",entity);
+        log.info("autoFill aspect entity:{}",entity);
 
         //准备赋值的数据
         LocalDateTime now = LocalDateTime.now();
