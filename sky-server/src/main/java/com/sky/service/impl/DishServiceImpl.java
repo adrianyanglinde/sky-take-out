@@ -24,6 +24,7 @@ import com.sky.entity.Dish;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -139,6 +140,20 @@ public class DishServiceImpl implements DishService {
             dishMapper.deleteById(id);
             dishFlavorMapper.deleteByDishId(id);
         }
+    }
+
+    /**
+     * 菜品起售、停售
+     * @param id
+     * @param status
+     * @return
+     */
+    public void setStatus(Long id,Integer status){
+        Dish dish = Dish.builder().id(id).status(status).build();
+        dishMapper.update(dish);
+
+        //TODO： 如果停售，当前菜品的套餐也要停售
+
     }
 
 
