@@ -15,7 +15,7 @@
         order by sort asc,create_time desc
     </select>
 
-    <select id="update">
+    <update id="update">
         update category
         <set>
             <if test="type != null">type = #{type},</if>
@@ -26,5 +26,5 @@
             <if test="updateUser != null">update_user = #{updateUser}</if>
         </set>
         where id = #{id}
-    </select>
+    </update>
 </mapper>
