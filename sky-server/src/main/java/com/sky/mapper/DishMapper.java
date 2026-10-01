@@ -13,6 +13,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface DishMapper {
 
@@ -37,6 +39,14 @@ public interface DishMapper {
      */
     @Select("select * from dish where id = #{id}")
     Dish getById(Long id);
+
+    /**
+     * 根据分类id获取菜品
+     * @param categoryId
+     * @return
+     */
+    @Select("select * from dish where category_id = #{categoryId}")
+    List<Dish> getByCategoryId(Long categoryId);
 
     /**
      * 根据id删除菜品

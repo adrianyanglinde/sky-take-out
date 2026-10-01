@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.sky.entity.DishFlavor;
+import com.sky.entity.SetmealDish;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -11,11 +12,18 @@ import java.util.List;
 public interface SetmealDishMapper {
 
     /**
-     * 根据菜品ids删除口味
+     * 根据菜品ids获取套餐ids
      * @param dishIds
      * @return
      */
 //    @Select("select * from setmeal_dish where dish_id in (1,2,3,4)")
-    List<Long> getSetmealByDishIds(List<Long> dishIds);
+    List<Long> getSetmealIdsByDishIds(List<Long> dishIds);
+
+    /**
+     * 插入数据
+     * @param setmealDishes
+     * @return
+     */
+    void insert(List<SetmealDish> setmealDishes);
 
 }

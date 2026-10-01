@@ -55,6 +55,16 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
+     * 根据分类id获取菜品
+     * @param categoryId
+     * @return
+     */
+    public List<Dish> getByCategoryId(Long categoryId){
+        // 查询菜品数据
+        return dishMapper.getByCategoryId(categoryId);
+    }
+
+    /**
      * 更新菜品详情
      * @param dishDTO
      * @return
@@ -130,7 +140,7 @@ public class DishServiceImpl implements DishService {
         }
 
         // 关联了套餐的菜品不能被删除
-        List<Long> setMealIds = setmealDishMapper.getSetmealByDishIds(ids);
+        List<Long> setMealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
         if(setMealIds.size() > 0){
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
