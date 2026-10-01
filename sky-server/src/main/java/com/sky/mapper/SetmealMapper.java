@@ -14,6 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface SetmealMapper {
@@ -32,6 +33,27 @@ public interface SetmealMapper {
      */
     Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
+    /**
+     * 根据id获取套餐
+     * @param id
+     * @return
+     */
+    @Select("select * from setmeal where id = #{id}")
+    Setmeal getById(Long id);
 
+    /**
+     * 根据id删除套餐
+     * @param id
+     * @return
+     */
+    @Select("delete from setmeal where id = #{id}")
+    void deleteById(Long id);
 
+    /**
+     * 更新套餐
+     * @param setmeal
+     * @return
+     */
+    @AutoFill(operationType = OperationType.UPDATE)
+    void update(Setmeal setmeal);
 }

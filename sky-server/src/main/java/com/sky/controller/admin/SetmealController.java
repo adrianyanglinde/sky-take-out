@@ -43,5 +43,37 @@ public class SetmealController {
         return Result.success(pageResult);
     }
 
+    @DeleteMapping()
+    @ApiOperation("批量删除")
+    public Result<String> delete(@RequestParam List<Long> ids){
+        log.info("批量删除 {}",ids);
+        setmealService.deleteBatch(ids);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询套餐")
+    public Result<SetmealVO> getById(@PathVariable Long id){
+        log.info("根据id查询套餐 {}",id);
+        SetmealVO setmealVO = setmealService.getById(id);
+        return Result.success(setmealVO);
+    }
+
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result<String> update(@RequestBody SetmealDTO setmealDTO){
+        log.info("修改套餐 {}",setmealDTO);
+        setmealService.update(setmealDTO);
+        return Result.success();
+    }
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("套餐起售、停售")
+    public Result<String> setStatus(@PathVariable Integer status,@RequestParam Long id){
+        log.info("套餐起售、停售 {} {}",status,id);
+        setmealService.setStatus(id,status);
+        return Result.success();
+    }
+
 
 }

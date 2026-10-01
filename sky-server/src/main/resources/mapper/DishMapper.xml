@@ -4,17 +4,16 @@
 <mapper namespace="com.sky.mapper.DishMapper">
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
         select d.*,c.name as category_name
-        from dish d
-        left join category c on d.category_id = c.id
+        from dish d left join category c on d.category_id = c.id
         <where>
             <if test="name != null and name != ''">
-                and name like concat('%',#{name},'%')
+                and d.name like concat('%',#{name},'%')
             </if>
             <if test="categoryId != null">
-                and categoryId = #{categoryId}
+                and d.category_id = #{categoryId}
             </if>
             <if test="status != null">
-                and status = #{status}
+                and d.status = #{status}
             </if>
         </where>
         order by create_time desc
@@ -40,4 +39,11 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="getBySetmealId" resultType="com.sky.entity.Dish">
+        select d.*,sd.setmeal_id as setmeal_id
+        from dish as d left join setmeal_dish as sd on d.id = sd.dish_id
+        where setmeal_id = #{setmealId};
+    </select>
+
 </mapper>

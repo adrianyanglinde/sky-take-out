@@ -9,11 +9,18 @@
         </foreach>
     </select>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <select id="getDishIdsBySetmealIds" resultType="java.lang.Long">
+        select dish_id from setmeal_dish where setmeal_id in
+        <foreach collection="setmealIds" separator="," item="setmealId" open="(" close=")">
+            #{setmealId}
+        </foreach>
+    </select>
+
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
         insert into setmeal_dish (setmeal_id,dish_id,name,price,copies)
         values
-        <foreach collection="setmealDishes" separator="," item="setmealDish">
-            (#{setmealDish.setmealId},#{setmealDish.dishId},#{setmealDish.name},#{setmealDish.price},#{setmealDish.copies})
+        <foreach collection="setmealDishes" separator="," item="sd">
+            (#{sd.setmealId},#{sd.dishId},#{sd.name},#{sd.price},#{sd.copies})
         </foreach>
     </insert>
 </mapper>

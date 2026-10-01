@@ -64,4 +64,11 @@ public interface DishMapper {
     @AutoFill(operationType = OperationType.UPDATE)
     void update(Dish dish);
 
+    /**
+     * 根据套餐id获取菜品
+     * @param setmealId
+     * @return
+     */
+    List<Dish> getBySetmealId(Long setmealId);
+
 }

@@ -13,6 +13,7 @@ import com.sky.entity.DishFlavor;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.SetmealEnableFailedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -40,24 +42,18 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     public SetmealDishMapper setmealDishMapper;
 
-    /**
-     * 分页查询
-     * @param setmealPageQueryDTO
-     * @return
-     */
+    @Autowired
+    public DishMapper dishMapper;
+
+    @Override
     public PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO){
         PageHelper.startPage(setmealPageQueryDTO.getPage(),setmealPageQueryDTO.getPageSize());
         Page<SetmealVO> page = setmealMapper.pageQuery(setmealPageQueryDTO);
-        long total = page.getTotal();
-        List<SetmealVO> records = page.getResult();
-        return new PageResult(total,records);
+        return new PageResult(page.getTotal(),page.getResult());
     };
 
 
-    /**
-     * 新增套餐
-     * @param setmealDTO
-     */
+    @Override
     @Transactional
     public void saveWithDishes(SetmealDTO setmealDTO){
 
@@ -71,13 +67,79 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDishes.forEach(setmealDish -> {
             setmealDish.setSetmealId(setmeal.getId());
         });
-        setmealDishMapper.insert(setmealDishes);
+        setmealDishMapper.insertBatch(setmealDishes);
     }
 
 
+    @Override
+    @Transactional
+    public void deleteBatch(List<Long> ids){
+        // 启售的套餐不能删除
+        for(Long id:ids){
+            Setmeal setmeal = setmealMapper.getById(id);
+            if(setmeal.getStatus() == StatusConstant.ENABLE){
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+            }
+        }
 
+        for(Long id:ids){
+            // 删除套餐表数据
+            setmealMapper.deleteById(id);
+            // 删除套餐菜品表数据
+            setmealDishMapper.deleteBySetmealId(id);
+        }
+    }
 
+    @Override
+    public SetmealVO getById(Long id){
 
+        // 获取套餐详情
+        Setmeal setmeal = setmealMapper.getById(id);
+        // 获取套餐详情中的套餐和菜品的关联关系
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
+        // 构造setmealVO
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal,setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+    }
+
+    @Transactional
+    @Override
+    public void update(SetmealDTO setmealDTO){
+
+        // 更新套餐表
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+        setmealMapper.update(setmeal);
+
+        // 更新套餐菜品表
+        Long id = setmealDTO.getId();
+        setmealDishMapper.deleteBySetmealId(id);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishes.forEach(setmealDish -> setmealDish.setSetmealId(id));
+        setmealDishMapper.insertBatch(setmealDishes);
+    }
+
+    @Override
+    public void setStatus(Long id,Integer status){
+        // 启售套餐时，判断套餐内菜品是否有停售的
+        if(status == StatusConstant.ENABLE){
+            List<Dish> dishes = dishMapper.getBySetmealId(id);
+            for(Dish dish:dishes){
+                if(dish.getStatus() == StatusConstant.DISABLE){
+                    throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                }
+            }
+        }
+
+        // 更新套餐表中状态
+        Setmeal setmeal = Setmeal.builder()
+                                .id(id)
+                                .status(status)
+                                .build();
+        setmealMapper.update(setmeal);
+    }
 
 
 }

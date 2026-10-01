@@ -20,10 +20,33 @@ public interface SetmealDishMapper {
     List<Long> getSetmealIdsByDishIds(List<Long> dishIds);
 
     /**
-     * 插入数据
+     * 根据套餐ids获取菜品ids
+     * @param setmealIds
+     * @return
+     */
+    List<Long> getDishIdsBySetmealIds(List<Long> setmealIds);
+
+    /**
+     * 插入批量数据
      * @param setmealDishes
      * @return
      */
-    void insert(List<SetmealDish> setmealDishes);
+    void insertBatch(List<SetmealDish> setmealDishes);
+
+    /**
+     * 根据套餐id删除数据
+     * @param setmealId
+     * @return
+     */
+    @Select("delete from setmeal_dish where setmeal_id = #{setmealId}")
+    void deleteBySetmealId(Long setmealId);
+
+    /**
+     * 根据套餐id获取套餐和菜品关系
+     * @param setmealId
+     * @return
+     */
+    @Select("select * from setmeal_dish where setmeal_id = #{setmealId}")
+    List<SetmealDish> getBySetmealId(Long setmealId);
 
 }
