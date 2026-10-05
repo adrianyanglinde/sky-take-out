@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,13 +25,28 @@ public class DishController {
     @Autowired
     public DishService dishService;
 
+    @Autowired
+    public RedisTemplate redisTemplate;
+
     @GetMapping("/list")
     @ApiOperation("根据分类id查询菜品")
     public Result<List<DishVO>> getByCategoryId(@RequestParam Long categoryId){
         log.info("根据分类id查询菜品，参数为：{}", categoryId);
+
+        // 构造redis中的key，规则：dishes_分类id
+        String key = "dishes_" + categoryId;
+
+        // 查询redis
+        List<DishVO> dishes = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        if(dishes != null && dishes.size() > 0){
+            return Result.success(dishes);
+        }
+
+        // 查询数据库
         Dish dish = new Dish();
         dish.setCategoryId(categoryId);
-        List<DishVO> dishes = dishService.listWithFlavor(dish);
+        dishes = dishService.listWithFlavor(dish);
+        redisTemplate.opsForValue().set(key,dishes);
         return Result.success(dishes);
     }
 
