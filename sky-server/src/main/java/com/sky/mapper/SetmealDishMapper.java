@@ -16,15 +16,7 @@ public interface SetmealDishMapper {
      * @param dishIds
      * @return
      */
-//    @Select("select * from setmeal_dish where dish_id in (1,2,3,4)")
     List<Long> getSetmealIdsByDishIds(List<Long> dishIds);
-
-    /**
-     * 根据套餐ids获取菜品ids
-     * @param setmealIds
-     * @return
-     */
-    List<Long> getDishIdsBySetmealIds(List<Long> setmealIds);
 
     /**
      * 插入批量数据

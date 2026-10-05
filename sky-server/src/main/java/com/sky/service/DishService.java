@@ -39,12 +39,18 @@ public interface DishService {
     DishVO getByIdWithFlavor(Long id);
 
     /**
-     * 根据分类id获取菜品
-     * @param categoryId
+     * 条件查询菜品
+     * @param dish
      * @return
      */
-    List<Dish> getByCategoryId(Long categoryId);
+    List<Dish> list(Dish dish);
 
+    /**
+     * 条件查询菜品和风味
+     * @param dish
+     * @return
+     */
+    List<DishVO> listWithFlavor(Dish dish);
 
     /**
      * 更新菜品详情

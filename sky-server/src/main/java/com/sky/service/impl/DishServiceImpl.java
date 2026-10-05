@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.sky.entity.Dish;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,11 +38,13 @@ public class DishServiceImpl implements DishService {
     @Autowired
     public SetmealDishMapper setmealDishMapper;
 
-    /**
-     * 获取菜品详情
-     * @param id
-     * @return
-     */
+    @Override
+    public List<Dish> list(Dish dish){
+        // 查询菜品数据
+        return dishMapper.list(dish);
+    }
+
+    @Override
     public DishVO getByIdWithFlavor(Long id){
         // 查询菜品数据
         Dish dish = dishMapper.getById(id);
@@ -54,21 +57,22 @@ public class DishServiceImpl implements DishService {
         return dishVO;
     }
 
-    /**
-     * 根据分类id获取菜品
-     * @param categoryId
-     * @return
-     */
-    public List<Dish> getByCategoryId(Long categoryId){
-        // 查询菜品数据
-        return dishMapper.getByCategoryId(categoryId);
+
+    @Override
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishes = list(dish);
+        List<DishVO> dishVOS = new ArrayList<>();
+        for(Dish d: dishes){
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+            List<DishFlavor> dishFlavors = dishFlavorMapper.getFlavorByDishId(d.getId());
+            dishVO.setFlavors(dishFlavors);
+            dishVOS.add(dishVO);
+        }
+        return dishVOS;
     }
 
-    /**
-     * 更新菜品详情
-     * @param dishDTO
-     * @return
-     */
+    @Override
     @Transactional
     public void updateWithFlavor(DishDTO dishDTO){
 
@@ -88,10 +92,7 @@ public class DishServiceImpl implements DishService {
         }
     }
 
-    /**
-     * 新增菜品和对应的口味
-     * @param dishDTO
-     */
+    @Override
     @Transactional
     public void saveWithFlavor(DishDTO dishDTO){
 
@@ -111,11 +112,7 @@ public class DishServiceImpl implements DishService {
         }
     }
 
-    /**
-     * 菜品分页查询
-     * @param dishPageQueryDTO
-     * @return
-     */
+    @Override
     public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO){
         PageHelper.startPage(dishPageQueryDTO.getPage(),dishPageQueryDTO.getPageSize());
         Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
@@ -124,11 +121,7 @@ public class DishServiceImpl implements DishService {
         return new PageResult(total,records);
     };
 
-    /**
-     * 批量删除菜品
-     * @param ids
-     * @return
-     */
+    @Override
     @Transactional
     public void deleteBatch(List<Long> ids){
         // 启售的菜品不能删除
@@ -152,12 +145,7 @@ public class DishServiceImpl implements DishService {
         }
     }
 
-    /**
-     * 菜品起售、停售
-     * @param id
-     * @param status
-     * @return
-     */
+    @Override
     public void setStatus(Long id,Integer status){
         Dish dish = Dish.builder().id(id).status(status).build();
         dishMapper.update(dish);

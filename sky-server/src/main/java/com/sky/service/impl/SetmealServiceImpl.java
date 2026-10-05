@@ -21,6 +21,7 @@ import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
@@ -104,6 +105,11 @@ public class SetmealServiceImpl implements SetmealService {
         return setmealVO;
     }
 
+    @Override
+    public List<Setmeal> list(Setmeal setmeal) {
+        return setmealMapper.list(setmeal);
+    }
+
     @Transactional
     @Override
     public void update(SetmealDTO setmealDTO){
@@ -139,6 +145,11 @@ public class SetmealServiceImpl implements SetmealService {
                                 .status(status)
                                 .build();
         setmealMapper.update(setmeal);
+    }
+
+    @Override
+    public List<DishItemVO> getDishItemsById(Long id) {
+        return setmealMapper.getDishItemsById(id);
     }
 
 
