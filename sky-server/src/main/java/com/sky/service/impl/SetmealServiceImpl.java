@@ -47,6 +47,11 @@ public class SetmealServiceImpl implements SetmealService {
     public DishMapper dishMapper;
 
     @Override
+    public Setmeal getById(Long id) {
+        return setmealMapper.getById(id);
+    }
+
+    @Override
     public PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO){
         PageHelper.startPage(setmealPageQueryDTO.getPage(),setmealPageQueryDTO.getPageSize());
         Page<SetmealVO> page = setmealMapper.pageQuery(setmealPageQueryDTO);
@@ -92,7 +97,7 @@ public class SetmealServiceImpl implements SetmealService {
     }
 
     @Override
-    public SetmealVO getById(Long id){
+    public SetmealVO getByIdWithDishes(Long id){
 
         // 获取套餐详情
         Setmeal setmeal = setmealMapper.getById(id);

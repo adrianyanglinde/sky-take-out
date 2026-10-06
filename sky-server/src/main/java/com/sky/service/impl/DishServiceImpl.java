@@ -45,6 +45,11 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    public Dish getById(Long id) {
+        return dishMapper.getById(id);
+    }
+
+    @Override
     public DishVO getByIdWithFlavor(Long id){
         // 查询菜品数据
         Dish dish = dishMapper.getById(id);
