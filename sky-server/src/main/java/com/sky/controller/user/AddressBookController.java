@@ -68,8 +68,9 @@ public class AddressBookController {
                 .isDefault(1)
                 .build();
         List<AddressBook> list = addressBookService.list(addressbook);
+        log.info("list:{}",list);
         if(list != null && list.size() > 0) {
-            Result.success(list.get(0));
+            return Result.success(list.get(0));
         }
         return Result.error("没有默认地址");
     }
