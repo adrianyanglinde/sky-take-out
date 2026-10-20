@@ -35,6 +35,7 @@ logging:
 
 sky:
   jwt:
+    # 管理端
     # 设置jwt签名加密时使用的秘钥
     admin-secret-key: itcast
     # 设置jwt过期时间
@@ -43,8 +44,11 @@ sky:
     admin-token-name: token
 
     # 用户端
+    # 设置jwt签名加密时使用的秘钥
     user-secret-key: itheima
+    # 设置jwt过期时间
     user-ttl: 7200000
+    # 设置前端传递过来的令牌名称
     user-token-name: authentication
   alioss:
     endpoint: ${sky.alioss.endpoint}
@@ -52,5 +56,21 @@ sky:
     access-key-secret: ${sky.alioss.access-key-secret}
     bucket-name: ${sky.alioss.bucket-name}
   wechat:
+    # 小程序的appid
     appid: ${sky.wechat.appid}
+    # 小程序的秘钥
     secret: ${sky.wechat.secret}
+    # 商户号
+    mchid: ${sky.wechat.mchid}
+    # 商户API证书的证书序列号
+    mchSerialNo: ${sky.wechat.mchSerialNo}
+    # 商户私钥文件
+    privateKeyFilePath: ${sky.wechat.privateKeyFilePath}
+    # 证书解密的密钥
+    apiV3Key: ${sky.wechat.apiV3Key}
+    # 平台证书
+    weChatPayCertFilePath: ${sky.wechat.weChatPayCertFilePath}
+    # 支付成功的回调地址
+    notifyUrl: ${sky.wechat.notifyUrl}
+    # 退款成功的回调地址
+    refundNotifyUrl: ${sky.wechat.refundNotifyUrl}

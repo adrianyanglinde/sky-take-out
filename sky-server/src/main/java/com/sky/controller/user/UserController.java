@@ -37,7 +37,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation("微信登录")
-    public Result<UserLoginVO> getStatus(@RequestBody UserLoginDTO userLoginDTO){
+    public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO){
         log.info("微信登录，参数:{}",userLoginDTO);
 
         // 微信登录
