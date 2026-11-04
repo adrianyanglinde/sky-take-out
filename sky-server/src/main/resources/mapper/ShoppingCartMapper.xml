@@ -7,6 +7,11 @@
         values
         (#{name},#{image},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{createTime})
     </insert>
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+        insert into shopping_cart (name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time)
+        values
+        <foreach collection="shoppingCartList" separator="," item="item">(#{item.name},#{item.image},#{item.userId},#{item.dishId},#{item.setmealId},#{item.dishFlavor},#{item.number},#{item.amount},#{item.createTime})</foreach>
+    </insert>
     <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart
         <where>
