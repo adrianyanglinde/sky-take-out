@@ -26,3 +26,7 @@ sky:
     weChatPayCertFilePath:
     notifyUrl: https://www.weixin.qq.com/wxpay/pay.php
     refundNotifyUrl: https://www.weixin.qq.com/wxpay/pay.php
+  shop:
+    address: 福建省厦门市思明区望海路2号
+  baidu:
+    ak: mvEaPBqm3ZrEB3x5mCvLEG9Ghrx4YA0R

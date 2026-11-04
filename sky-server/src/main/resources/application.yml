@@ -74,3 +74,9 @@ sky:
     notifyUrl: ${sky.wechat.notifyUrl}
     # 退款成功的回调地址
     refundNotifyUrl: ${sky.wechat.refundNotifyUrl}
+  shop:
+    # 店铺地址
+    address: ${sky.shop.address}
+  baidu:
+    # 百度ak
+    ak: ${sky.baidu.ak}
