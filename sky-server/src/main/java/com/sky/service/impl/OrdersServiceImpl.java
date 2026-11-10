@@ -24,6 +24,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Or;
@@ -53,6 +54,9 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private ShoppingCartMapper shoppingCartMapper;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     @Autowired
     private UserMapper userMapper;
@@ -164,6 +168,14 @@ public class OrdersServiceImpl implements OrdersService {
                 .orderAmount(order.getAmount())
                 .orderTime(order.getOrderTime())
                 .build();
+
+        // 消息通知
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("type",1);
+        map.put("orderId",order.getId());
+        map.put("content", "订单号：" + order.getNumber());
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+
         return orderSubmitVO;
     }
 
@@ -381,7 +393,18 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersMapper.statistics();
     }
 
-
+    @Override
+    public void reminder(Long id) {
+        Orders ordersDB = ordersMapper.getById(id);
+        if (ordersDB == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("type",2);
+        map.put("orderId",ordersDB.getId());
+        map.put("content", "订单号：" + ordersDB.getNumber());
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
 
 
 }
