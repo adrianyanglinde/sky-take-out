@@ -2,8 +2,12 @@ package com.sky.service.impl;
 
 
 
+import com.sky.constant.StatusConstant;
 import com.sky.entity.Orders;
+import com.sky.entity.Setmeal;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.OrdersMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.WorkspaceService;
 import com.sky.utils.HttpClientUtil;
@@ -28,6 +32,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Autowired
     private OrdersMapper orderMapper;
+
+    @Autowired
+    private DishMapper dishMapper;
+
+    @Autowired
+    private SetmealMapper setmealMapper;
 
     @Override
     public BusinessDataVO businessData(LocalDateTime beginTime,LocalDateTime endTime) {
@@ -93,11 +103,27 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public DishOverViewVO overviewDishes() {
-        return null;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("status", StatusConstant.ENABLE);
+        Integer sold = dishMapper.countByMap(map);
+        map.put("status", StatusConstant.DISABLE);
+        Integer discontinued = dishMapper.countByMap(map);
+        return DishOverViewVO.builder()
+                .sold(sold)
+                .discontinued(discontinued)
+                .build();
     }
 
     @Override
     public SetmealOverViewVO overviewSetmeals() {
-        return null;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("status", StatusConstant.ENABLE);
+        Integer sold = setmealMapper.countByMap(map);
+        map.put("status", StatusConstant.DISABLE);
+        Integer discontinued = setmealMapper.countByMap(map);
+        return SetmealOverViewVO.builder()
+                .sold(sold)
+                .discontinued(discontinued)
+                .build();
     }
 }
